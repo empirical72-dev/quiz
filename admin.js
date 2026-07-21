@@ -14,49 +14,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 문제 데이터 (객관식 보기 포함)
+// 문제 데이터
 const questions = {
   1: {
     text: "대한민국의 수도는 어디일까요?",
-    options: ["1) 서울", "2) 부산", "3) 대구", "4) 인천"],
-    answer: 1
+    options: ["1) 서울", "2) 부산", "3) 대구", "4) 인천"]
   },
   2: {
     text: "2+2는?",
-    options: ["1) 3", "2) 4", "3) 5", "4) 6"],
-    answer: 2
+    options: ["1) 3", "2) 4", "3) 5", "4) 6"]
   },
   3: {
     text: "바다의 색깔은?",
-    options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"],
-    answer: 2
+    options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"]
   }
 };
 
 const adminQuestionBox = document.getElementById("adminQuestionBox");
 
+// 문제 시작 (기존 문제 유지)
 function startQuestion(num) {
   const q = questions[num];
   // DB에 기록
   set(ref(db, "currentQuestion"), { number: num, text: q.text, options: q.options });
-  // 관리자 화면에 표시
-  adminQuestionBox.innerHTML = `
+
+  // 새로운 문제 블록 추가
+  const questionDiv = document.createElement("div");
+  questionDiv.className = "question-item";
+  questionDiv.innerHTML = `
     <h3>문제 ${num}. ${q.text}</h3>
     <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
     <div>
       <label>정답 입력 (번호): </label>
-      <input id="answerInput" type="number" min="1" max="4">
-      <button id="saveAnswer">정답 저장</button>
+      <input id="answerInput${num}" type="number" min="1" max="4">
+      <button id="saveAnswer${num}">정답 저장</button>
     </div>
-    <div id="resultBox"></div>
+    <div id="resultBox${num}" class="result-box"></div>
   `;
+  adminQuestionBox.appendChild(questionDiv);
 
-  // 정답 저장 버튼 이벤트
-  document.getElementById("saveAnswer").addEventListener("click", () => {
-    const answerNum = parseInt(document.getElementById("answerInput").value);
+  // 정답 저장 이벤트
+  document.getElementById(`saveAnswer${num}`).addEventListener("click", () => {
+    const answerNum = parseInt(document.getElementById(`answerInput${num}`).value);
     if (answerNum >= 1 && answerNum <= 4) {
-      set(ref(db, "currentQuestion/answer"), answerNum);
-      alert("정답이 저장되었습니다.");
+      set(ref(db, `questions/${num}/answer`), answerNum);
+      alert(`문제 ${num} 정답이 저장되었습니다.`);
       checkAnswers(num, answerNum);
     } else {
       alert("1~4 사이의 번호를 입력하세요.");
@@ -67,7 +69,7 @@ function startQuestion(num) {
 // 참가자 답안 확인 및 정답자 추출
 async function checkAnswers(num, correctAnswer) {
   const snapshot = await get(child(ref(db), "answers"));
-  const resultBox = document.getElementById("resultBox");
+  const resultBox = document.getElementById(`resultBox${num}`);
   if (snapshot.exists()) {
     const answers = snapshot.val();
     const correctUsers = [];
@@ -79,13 +81,13 @@ async function checkAnswers(num, correctAnswer) {
     resultBox.innerHTML = `
       <p>정답자: ${correctUsers.length > 0 ? correctUsers.join(", ") : "없음"}</p>
       <label>당첨자 수: </label>
-      <input id="winnerCount" type="number" min="1">
-      <button id="pickWinners">추첨</button>
+      <input id="winnerCount${num}" type="number" min="1">
+      <button id="pickWinners${num}">추첨</button>
     `;
 
     // 랜덤 추첨
-    document.getElementById("pickWinners").addEventListener("click", () => {
-      const count = parseInt(document.getElementById("winnerCount").value);
+    document.getElementById(`pickWinners${num}`).addEventListener("click", () => {
+      const count = parseInt(document.getElementById(`winnerCount${num}`).value);
       if (count > 0 && correctUsers.length >= count) {
         const winners = [];
         const pool = [...correctUsers];
