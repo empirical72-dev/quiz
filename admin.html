@@ -3,15 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>관리자 화면</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <h2>관리자 화면</h2>
-  <button id="startQ1">문제 1 시작</button>
-  <button id="startQ2">문제 2 시작</button>
-  <button id="startQ3">문제 3 시작</button>
+  <div class="container">
+    <h1>관리자 화면</h1>
 
-  <!-- 문제 표시 영역 -->
-  <div id="adminQuestionBox"></div>
+    <div class="question-control">
+      <span>문제 1</span>
+      <button id="startQ1" class="btn">시작</button>
+    </div>
+    <div class="question-control">
+      <span>문제 2</span>
+      <button id="startQ2" class="btn">시작</button>
+    </div>
+    <div class="question-control">
+      <span>문제 3</span>
+      <button id="startQ3" class="btn">시작</button>
+    </div>
+
+    <!-- 문제 표시 영역 -->
+    <div id="adminQuestionBox" class="question-box"></div>
+  </div>
 
   <script type="module" src="admin.js"></script>
 </body>
