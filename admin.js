@@ -32,13 +32,13 @@ const questions = {
 
 const adminQuestionBox = document.getElementById("adminQuestionBox");
 
-// 문제 시작 (누적 표시)
+// 문제 시작 (버튼 아래에 박스 누적)
 function startQuestion(num) {
   const q = questions[num];
   // DB에 기록
   set(ref(db, "currentQuestion"), { number: num, text: q.text, options: q.options });
 
-  // 새로운 문제 블록 추가 (기존 문제 유지)
+  // 새로운 문제 박스 생성
   const questionDiv = document.createElement("div");
   questionDiv.className = "question-item";
   questionDiv.innerHTML = `
