@@ -14,33 +14,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 문제 데이터
 const questions = {
-  1: {
-    text: "대한민국의 수도는 어디일까요?",
-    options: ["1) 서울", "2) 부산", "3) 대구", "4) 인천"]
-  },
-  2: {
-    text: "2+2는?",
-    options: ["1) 3", "2) 4", "3) 5", "4) 6"]
-  },
-  3: {
-    text: "바다의 색깔은?",
-    options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"]
-  }
+  1: { text: "대한민국의 수도는 어디일까요?", options: ["1) 서울", "2) 부산", "3) 대구", "4) 인천"] },
+  2: { text: "2+2는?", options: ["1) 3", "2) 4", "3) 5", "4) 6"] },
+  3: { text: "바다의 색깔은?", options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"] }
 };
 
-const adminQuestionBox = document.getElementById("adminQuestionBox");
-
-// 문제 시작 (버튼 아래에 박스 누적)
+// 문제 시작 시 버튼 바로 아래에 박스 생성
 function startQuestion(num) {
   const q = questions[num];
-  // DB에 기록
   set(ref(db, "currentQuestion"), { number: num, text: q.text, options: q.options });
 
-  // 새로운 문제 박스 생성
+  const button = document.getElementById(`startQ${num}`);
+  // 이미 박스가 있으면 중복 생성 방지
+  if (document.getElementById(`questionBox${num}`)) return;
+
   const questionDiv = document.createElement("div");
   questionDiv.className = "question-item";
+  questionDiv.id = `questionBox${num}`;
   questionDiv.innerHTML = `
     <h3>문제 ${num}. ${q.text}</h3>
     <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
@@ -51,7 +42,9 @@ function startQuestion(num) {
     </div>
     <div id="resultBox${num}" class="result-box"></div>
   `;
-  adminQuestionBox.appendChild(questionDiv);
+
+  // 버튼 바로 아래에 삽입
+  button.insertAdjacentElement("afterend", questionDiv);
 
   // 정답 저장 이벤트
   document.getElementById(`saveAnswer${num}`).addEventListener("click", () => {
@@ -85,7 +78,6 @@ async function checkAnswers(num, correctAnswer) {
       <button id="pickWinners${num}">추첨</button>
     `;
 
-    // 랜덤 추첨
     document.getElementById(`pickWinners${num}`).addEventListener("click", () => {
       const count = parseInt(document.getElementById(`winnerCount${num}`).value);
       if (count > 0 && correctUsers.length >= count) {
