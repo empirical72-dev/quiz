@@ -6,8 +6,8 @@ body {
 }
 
 .container {
-  max-width: 95%;
-  margin: 10px auto;
+  max-width: 700px;
+  margin: 20px auto;
   padding: 20px;
   background: #fff;
   border-radius: 12px;
@@ -18,40 +18,40 @@ h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 2.6rem; /* 제목 크게 */
+  font-size: 2rem; /* 관리자 모드와 동일 */
 }
 
 .question-area {
-  font-size: 2rem; /* 문제 크게 */
+  font-size: 1.4rem; /* 관리자 모드와 동일 */
   margin-bottom: 20px;
 }
 
 .answer-area {
-  font-size: 1.8rem; /* 답 입력 영역 크게 */
+  font-size: 1.2rem; /* 관리자 모드와 동일 */
   margin-bottom: 20px;
 }
 
 label {
   display: block;
   margin-bottom: 10px;
-  font-size: 1.8rem;
+  font-size: 1.2rem;
 }
 
 input {
-  font-size: 1.8rem;
-  padding: 14px;
+  font-size: 1.2rem;
+  padding: 8px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .btn {
-  padding: 16px 24px;
-  font-size: 1.8rem;
+  padding: 12px 20px;
+  font-size: 1.2rem;
   background-color: #0078d7;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
@@ -60,13 +60,22 @@ input {
 }
 
 .result-area {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .winner-area {
-  font-size: 1.8rem;
-  margin-top: 25px;
+  font-size: 1.3rem;
+  margin-top: 20px;
   color: green;
+}
+
+/* 📱 모바일 화면 대응: 글씨 더 크게 */
+@media (max-width: 480px) {
+  h1 { font-size: 2.6rem; }
+  .question-area { font-size: 2rem; }
+  .answer-area, label, input, .btn { font-size: 1.8rem; }
+  .result-area { font-size: 2rem; }
+  .winner-area { font-size: 1.8rem; }
 }
