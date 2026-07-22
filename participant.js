@@ -21,10 +21,9 @@ const submitBtn = document.getElementById("submitAnswer");
 const resultArea = document.getElementById("resultArea");
 const winnerArea = document.getElementById("winnerArea");
 
-// 참가자 이름 입력
 const userName = prompt("이름을 입력하세요:") || "참가자";
 
-// ✅ 현재 문제 표시
+// ✅ 문제 표시
 onValue(ref(db, "currentQuestion"), (snapshot) => {
   if (snapshot.exists()) {
     const q = snapshot.val();
@@ -87,10 +86,16 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
   }
 });
 
-// ✅ 당첨자 표시
+// ✅ 당첨자 표시 (배열로 저장된 winners 읽기)
 onValue(ref(db, "winners"), (snapshot) => {
   if (snapshot.exists()) {
     const winners = snapshot.val();
-    winnerArea.innerHTML = `<p>당첨자: ${winners.join(", ")}</p>`;
+    if (Array.isArray(winners)) {
+      winnerArea.innerHTML = `<p>당첨자: ${winners.join(", ")}</p>`;
+    } else {
+      // 혹시 객체 형태로 저장된 경우 처리
+      const list = Object.values(winners);
+      winnerArea.innerHTML = `<p>당첨자: ${list.join(", ")}</p>`;
+    }
   }
 });

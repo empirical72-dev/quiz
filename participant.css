@@ -1,75 +1,21 @@
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background-color: #f0f2f5;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* ✅ PC 버전: 관리자 모드와 동일한 글씨 크기 */
 h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
   font-size: 2rem; /* 관리자 모드 제목과 동일 */
 }
 
 .question-area {
   font-size: 1.4rem; /* 관리자 모드 문제 박스와 동일 */
-  margin-bottom: 20px;
 }
 
-.answer-area {
+.answer-area, label, input, .btn {
   font-size: 1.2rem; /* 관리자 모드 입력 영역과 동일 */
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-}
-
-input {
-  font-size: 1.2rem;
-  padding: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-}
-
-.btn {
-  padding: 12px 20px;
-  font-size: 1.2rem;
-  background-color: #0078d7;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #005a9e;
 }
 
 .result-area {
   font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 15px;
 }
 
 .winner-area {
   font-size: 1.3rem;
-  margin-top: 20px;
-  color: green;
 }
 
 /* 📱 모바일 화면 대응: 글씨 더 크게 */
