@@ -19,16 +19,16 @@ h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 2rem;
+  font-size: 2rem; /* 관리자 모드 제목과 동일 */
 }
 
 .question-area {
-  font-size: 1.4rem;
+  font-size: 1.4rem; /* 관리자 모드 문제 박스와 동일 */
   margin-bottom: 20px;
 }
 
 .answer-area {
-  font-size: 1.2rem;
+  font-size: 1.2rem; /* 관리자 모드 입력 영역과 동일 */
   margin-bottom: 20px;
 }
 
