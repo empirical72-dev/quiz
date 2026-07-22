@@ -14,20 +14,21 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* ✅ PC 버전: 관리자 모드와 동일한 글씨 크기 */
 h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 2rem; /* 관리자 모드와 동일 */
+  font-size: 2rem;
 }
 
 .question-area {
-  font-size: 1.4rem; /* 관리자 모드와 동일 */
+  font-size: 1.4rem;
   margin-bottom: 20px;
 }
 
 .answer-area {
-  font-size: 1.2rem; /* 관리자 모드와 동일 */
+  font-size: 1.2rem;
   margin-bottom: 20px;
 }
 
