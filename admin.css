@@ -1,29 +1,66 @@
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
 h1 {
   text-align: center;
+  color: #333;
+  margin-bottom: 20px;
   font-size: 2rem; /* 참가자 모드와 동일 */
 }
 
-.question-box {
-  border: 2px solid #333;
-  padding: 15px;
-  margin: 20px auto;
-  width: 80%;
-  font-size: 1.4rem; /* 참가자 모드와 동일 */
-  background-color: #f9f9f9;
+.question-control {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
 }
 
-label, input, .btn {
-  font-size: 1.2rem; /* 참가자 모드와 동일 */
-  margin: 5px;
+.question-control span {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1.4rem; /* 참가자 모드 문제 박스와 동일 */
 }
 
 .btn {
-  padding: 5px 10px;
+  padding: 8px 16px;
+  background-color: #0078d7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1.2rem; /* 참가자 모드 입력 영역과 동일 */
 }
 
-#result-area {
-  margin-top: 20px;
-  font-size: 1.5rem;
-  color: green;
+.btn:hover {
+  background-color: #005a9e;
+}
+
+.question-item {
+  margin: 10px 0 25px 0;
+  padding: 15px;
+  background: #f9fafc;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1.4rem; /* 문제 박스 글씨 크기 동일 */
+}
+
+.result-box {
+  margin-top: 15px;
+  padding: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  font-size: 1.3rem;
 }

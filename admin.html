@@ -4,27 +4,28 @@
   <meta charset="UTF-8">
   <title>관리자 모드</title>
   <link rel="stylesheet" href="admin.css">
-  <script type="module" src="admin.js"></script>
 </head>
 <body>
-  <h1>퀴즈 관리자 모드</h1>
+  <div class="container">
+    <h1>관리자 모드</h1>
 
-  <div id="question-area"></div>
+    <div class="question-control">
+      <span>문제 1</span>
+      <button id="startQ1" class="btn">시작</button>
+    </div>
 
-  <div id="control-area">
-    <label for="questionNum">문제 번호:</label>
-    <input type="number" id="questionNum" min="1">
-    <button id="startBtn" class="btn">문제 시작</button>
+    <div class="question-control">
+      <span>문제 2</span>
+      <button id="startQ2" class="btn">시작</button>
+    </div>
+
+    <div class="question-control">
+      <span>문제 3</span>
+      <button id="startQ3" class="btn">시작</button>
+    </div>
   </div>
 
-  <div id="answer-area">
-    <label for="correctAnswer">정답 번호:</label>
-    <input type="number" id="correctAnswer" min="1">
-    <label for="winnerCount">추첨 인원:</label>
-    <input type="number" id="winnerCount" min="1">
-    <button id="checkBtn" class="btn">정답 확인 및 추첨</button>
-  </div>
-
-  <div id="result-area"></div>
+  <!-- 관리자 모드 JS 연결 -->
+  <script type="module" src="admin.js"></script>
 </body>
 </html>

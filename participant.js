@@ -21,15 +21,18 @@ const submitBtn = document.getElementById("submitAnswer");
 const resultArea = document.getElementById("resultArea");
 const winnerArea = document.getElementById("winnerArea");
 
+// 참가자 이름 입력
 const userName = prompt("이름을 입력하세요:") || "참가자";
 
-// ✅ 문제 표시
+// 현재 문제 표시
 onValue(ref(db, "currentQuestion"), (snapshot) => {
   if (snapshot.exists()) {
     const q = snapshot.val();
     questionArea.innerHTML = `
-      <h2>문제 ${q.number}. ${q.text}</h2>
-      <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
+      <div class="question-box">
+        <h2>문제 ${q.number}. ${q.text}</h2>
+        <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
+      </div>
     `;
     answerArea.style.display = "block";
     resultArea.innerHTML = "";
@@ -40,7 +43,7 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
   }
 });
 
-// ✅ 답 제출
+// 답 제출
 submitBtn.addEventListener("click", () => {
   const answerNum = parseInt(answerInput.value);
   const qNumber = parseInt(document.querySelector("h2").textContent.match(/\d+/)[0]);
@@ -57,7 +60,7 @@ submitBtn.addEventListener("click", () => {
   }
 });
 
-// ✅ 정답 + 당첨자 표시
+// 관리자가 정답 입력 → 참가자에게 O/X + 정답 표시
 onValue(ref(db, "currentQuestion"), (snapshot) => {
   if (snapshot.exists()) {
     const currentQ = snapshot.val();
@@ -86,11 +89,10 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
   }
 });
 
-// ✅ 당첨자 표시 (정답 결과 아래에 붙여서 표시)
+// 관리자가 당첨자 추첨 → 참가자에게 당첨자 표시
 onValue(ref(db, "winners"), (snapshot) => {
   if (snapshot.exists()) {
-    const winners = snapshot.val();
-    const list = Array.isArray(winners) ? winners : Object.values(winners);
-    winnerArea.innerHTML = `<p>당첨자 ${list.join(", ")}</p>`;
+    const winners = Array.isArray(snapshot.val()) ? snapshot.val() : Object.values(snapshot.val());
+    winnerArea.innerHTML = `<p>당첨자: ${winners.join(", ")}</p>`;
   }
 });
