@@ -6,8 +6,8 @@ body {
 }
 
 .container {
-  max-width: 600px;
-  margin: 20px auto;
+  max-width: 95%; /* 화면 거의 꽉 차게 */
+  margin: 10px auto;
   padding: 20px;
   background: #fff;
   border-radius: 12px;
@@ -18,39 +18,40 @@ h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 2rem;
+  font-size: 2.6rem; /* 제목 크게 */
 }
 
 .question-area {
-  font-size: 1.4rem;
+  font-size: 2rem; /* 문제 크게 */
   margin-bottom: 20px;
 }
 
 .answer-area {
-  font-size: 1.2rem;
+  font-size: 1.8rem; /* 답 입력 영역 크게 */
   margin-bottom: 20px;
 }
 
 label {
   display: block;
   margin-bottom: 10px;
+  font-size: 1.8rem; /* 라벨 크게 */
 }
 
 input {
-  font-size: 1.2rem;
-  padding: 8px;
+  font-size: 1.8rem; /* 입력칸 크게 */
+  padding: 14px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .btn {
-  padding: 12px 20px;
-  font-size: 1.2rem;
+  padding: 16px 24px;
+  font-size: 1.8rem; /* 버튼 글씨 크게 */
   background-color: #0078d7;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -59,13 +60,13 @@ input {
 }
 
 .result-area {
-  font-size: 1.5rem;
+  font-size: 2rem; /* 결과 크게 */
   font-weight: bold;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .winner-area {
-  font-size: 1.3rem;
-  margin-top: 20px;
+  font-size: 1.8rem; /* 당첨자 크게 */
+  margin-top: 25px;
   color: green;
 }

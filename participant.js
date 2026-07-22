@@ -59,28 +59,31 @@ submitBtn.addEventListener("click", () => {
 });
 
 // 관리자가 정답 입력 → 참가자에게 O/X + 정답 표시
-onValue(ref(db, "questions"), (snapshot) => {
+onValue(ref(db, "currentQuestion"), (snapshot) => {
   if (snapshot.exists()) {
-    const questions = snapshot.val();
-    const qNumber = parseInt(document.querySelector("h2").textContent.match(/\d+/)[0]);
-    if (questions[qNumber] && questions[qNumber].answer) {
-      const correctAnswer = questions[qNumber].answer;
+    const currentQ = snapshot.val();
+    const qNumber = currentQ.number;
 
-      onValue(ref(db, "answers"), (ansSnap) => {
-        if (ansSnap.exists()) {
-          const answers = ansSnap.val();
-          for (const key in answers) {
-            if (answers[key].name === userName && answers[key].question === qNumber) {
-              if (answers[key].answer === correctAnswer) {
-                resultArea.innerHTML = `⭕ 정답! (정답은 ${correctAnswer}번)`;
-              } else {
-                resultArea.innerHTML = `❌ 오답! (정답은 ${correctAnswer}번)`;
+    onValue(ref(db, `questions/${qNumber}/answer`), (ansSnap) => {
+      if (ansSnap.exists()) {
+        const correctAnswer = ansSnap.val();
+
+        onValue(ref(db, "answers"), (answersSnap) => {
+          if (answersSnap.exists()) {
+            const answers = answersSnap.val();
+            for (const key in answers) {
+              if (answers[key].name === userName && answers[key].question === qNumber) {
+                if (answers[key].answer === correctAnswer) {
+                  resultArea.innerHTML = `⭕ 정답! (정답은 ${correctAnswer}번)`;
+                } else {
+                  resultArea.innerHTML = `❌ 오답! (정답은 ${correctAnswer}번)`;
+                }
               }
             }
           }
-        }
-      });
-    }
+        });
+      }
+    });
   }
 });
 
