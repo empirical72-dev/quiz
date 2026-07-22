@@ -1,0 +1,30 @@
+h1 {
+  font-size: 2rem; /* 관리자 모드 제목과 동일 */
+}
+
+.question-area {
+  font-size: 1.4rem; /* 관리자 모드 문제 박스와 동일 */
+}
+
+.answer-area, label, input, .btn {
+  font-size: 1.2rem; /* 관리자 모드 입력 영역과 동일 */
+}
+
+.result-area {
+  font-size: 1.5rem;
+}
+
+.winner-area {
+  font-size: 1.3rem;
+  margin-top: 10px;
+  color: green;
+}
+
+/* 📱 모바일 화면 대응: 글씨 더 크게 */
+@media (max-width: 480px) {
+  h1 { font-size: 2.6rem; }
+  .question-area { font-size: 2rem; }
+  .answer-area, label, input, .btn { font-size: 1.8rem; }
+  .result-area { font-size: 2rem; }
+  .winner-area { font-size: 1.8rem; }
+}
