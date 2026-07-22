@@ -20,12 +20,14 @@ const questions = {
   3: { text: "바다의 색깔은?", options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"] }
 };
 
-// 문제 시작 시 버튼 바로 아래에 박스 생성
+// 문제 시작 시 버튼을 감싸는 div 바로 아래에 박스 생성
 function startQuestion(num) {
   const q = questions[num];
   set(ref(db, "currentQuestion"), { number: num, text: q.text, options: q.options });
 
   const button = document.getElementById(`startQ${num}`);
+  const parentDiv = button.parentNode; // 버튼을 감싸는 div
+
   // 이미 박스가 있으면 중복 생성 방지
   if (document.getElementById(`questionBox${num}`)) return;
 
@@ -43,8 +45,8 @@ function startQuestion(num) {
     <div id="resultBox${num}" class="result-box"></div>
   `;
 
-  // 버튼 바로 아래에 삽입
-  button.insertAdjacentElement("afterend", questionDiv);
+  // 버튼을 감싸는 div 바로 아래에 삽입 (옆이 아니라 아래로)
+  parentDiv.insertAdjacentElement("afterend", questionDiv);
 
   // 정답 저장 이벤트
   document.getElementById(`saveAnswer${num}`).addEventListener("click", () => {
