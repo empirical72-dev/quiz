@@ -64,10 +64,12 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
     const currentQ = snapshot.val();
     const qNumber = currentQ.number;
 
+    // 해당 문제의 정답만 확인
     onValue(ref(db, `questions/${qNumber}/answer`), (ansSnap) => {
       if (ansSnap.exists()) {
         const correctAnswer = ansSnap.val();
 
+        // 참가자의 답안 확인
         onValue(ref(db, "answers"), (answersSnap) => {
           if (answersSnap.exists()) {
             const answers = answersSnap.val();

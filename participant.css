@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-  max-width: 95%; /* 화면 거의 꽉 차게 */
+  max-width: 95%;
   margin: 10px auto;
   padding: 20px;
   background: #fff;
@@ -34,11 +34,11 @@ h1 {
 label {
   display: block;
   margin-bottom: 10px;
-  font-size: 1.8rem; /* 라벨 크게 */
+  font-size: 1.8rem;
 }
 
 input {
-  font-size: 1.8rem; /* 입력칸 크게 */
+  font-size: 1.8rem;
   padding: 14px;
   width: 100%;
   box-sizing: border-box;
@@ -47,7 +47,7 @@ input {
 
 .btn {
   padding: 16px 24px;
-  font-size: 1.8rem; /* 버튼 글씨 크게 */
+  font-size: 1.8rem;
   background-color: #0078d7;
   color: #fff;
   border: none;
@@ -60,13 +60,13 @@ input {
 }
 
 .result-area {
-  font-size: 2rem; /* 결과 크게 */
+  font-size: 2rem;
   font-weight: bold;
   margin-top: 20px;
 }
 
 .winner-area {
-  font-size: 1.8rem; /* 당첨자 크게 */
+  font-size: 1.8rem;
   margin-top: 25px;
   color: green;
 }
