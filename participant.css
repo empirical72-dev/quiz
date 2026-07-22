@@ -6,8 +6,8 @@ body {
 }
 
 .container {
-  max-width: 600px;
-  margin: 20px auto;
+  max-width: 700px;
+  margin: 40px auto;
   padding: 20px;
   background: #fff;
   border-radius: 12px;
@@ -18,34 +18,21 @@ h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 2rem; /* 크게 */
 }
 
-.question-area {
-  font-size: 1.4rem; /* 크게 */
-  margin-bottom: 20px;
+.question-control {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
 }
 
-.answer-area {
-  font-size: 1.2rem; /* 크게 */
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-input {
-  font-size: 1.2rem; /* 입력칸 크게 */
-  padding: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 10px;
+.question-control span {
+  flex: 1;
+  font-weight: bold;
 }
 
 .btn {
-  padding: 12px 20px;
-  font-size: 1.2rem; /* 버튼 글씨 크게 */
+  padding: 8px 16px;
   background-color: #0078d7;
   color: #fff;
   border: none;
@@ -55,4 +42,20 @@ input {
 
 .btn:hover {
   background-color: #005a9e;
+}
+
+.question-item {
+  margin: 10px 0 25px 0;
+  padding: 15px;
+  background: #f9fafc;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.result-box {
+  margin-top: 15px;
+  padding: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
 }

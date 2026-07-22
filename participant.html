@@ -2,24 +2,29 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>참가자 모드</title>
-  <link rel="stylesheet" href="participant.css">
+  <title>관리자 모드</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
   <div class="container">
-    <h1>참가자 모드</h1>
+    <h1>관리자 모드</h1>
 
-    <div id="questionArea" class="question-area">
-      <p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>
+    <div class="question-control">
+      <span>문제 1</span>
+      <button id="startQ1" class="btn">시작</button>
     </div>
 
-    <div id="answerArea" class="answer-area" style="display:none;">
-      <label for="answerInput">정답 입력 (번호):</label>
-      <input id="answerInput" type="number" min="1" max="4">
-      <button id="submitAnswer" class="btn">제출</button>
+    <div class="question-control">
+      <span>문제 2</span>
+      <button id="startQ2" class="btn">시작</button>
+    </div>
+
+    <div class="question-control">
+      <span>문제 3</span>
+      <button id="startQ3" class="btn">시작</button>
     </div>
   </div>
 
-  <script type="module" src="participant.js"></script>
+  <script type="module" src="admin.js"></script>
 </body>
 </html>
