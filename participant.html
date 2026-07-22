@@ -9,17 +9,22 @@
   <div class="container">
     <h1>참가자 모드</h1>
 
+    <!-- 문제 표시 영역 -->
     <div id="questionArea" class="question-area">
       <p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>
     </div>
 
+    <!-- 답 제출 영역 -->
     <div id="answerArea" class="answer-area" style="display:none;">
       <label for="answerInput">정답 입력 (번호):</label>
       <input id="answerInput" type="number" min="1" max="4">
       <button id="submitAnswer" class="btn">제출</button>
     </div>
 
+    <!-- 정답 결과 표시 -->
     <div id="resultArea" class="result-area"></div>
+
+    <!-- 당첨자 표시 -->
     <div id="winnerArea" class="winner-area"></div>
   </div>
 
