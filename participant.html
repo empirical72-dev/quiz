@@ -2,15 +2,23 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>참가자 화면</title>
+  <title>참가자 모드</title>
+  <link rel="stylesheet" href="participant.css">
 </head>
 <body>
-  <h2>참가자 화면</h2>
-  <input id="nickname" placeholder="닉네임 입력">
-  <button id="joinBtn">참가하기</button>
+  <div class="container">
+    <h1>참가자 모드</h1>
 
-  <!-- 문제 표시 영역 -->
-  <div id="questionBox"></div>
+    <div id="questionArea" class="question-area">
+      <p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>
+    </div>
+
+    <div id="answerArea" class="answer-area" style="display:none;">
+      <label for="answerInput">정답 입력 (번호):</label>
+      <input id="answerInput" type="number" min="1" max="4">
+      <button id="submitAnswer" class="btn">제출</button>
+    </div>
+  </div>
 
   <script type="module" src="participant.js"></script>
 </body>

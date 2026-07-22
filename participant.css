@@ -1,0 +1,58 @@
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 2rem; /* 크게 */
+}
+
+.question-area {
+  font-size: 1.4rem; /* 크게 */
+  margin-bottom: 20px;
+}
+
+.answer-area {
+  font-size: 1.2rem; /* 크게 */
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input {
+  font-size: 1.2rem; /* 입력칸 크게 */
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 12px 20px;
+  font-size: 1.2rem; /* 버튼 글씨 크게 */
+  background-color: #0078d7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #005a9e;
+}
