@@ -18,16 +18,16 @@ h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 2rem; /* 관리자 모드와 동일 */
+  font-size: 2rem; /* 제목 유지 */
 }
 
 .question-area {
-  font-size: 1.4rem; /* 관리자 모드 문제 박스와 동일 */
+  font-size: 1.3rem; /* 제목의 2/3 크기 */
   margin-bottom: 20px;
 }
 
 .answer-area {
-  font-size: 1.2rem; /* 관리자 모드 입력 영역과 동일 */
+  font-size: 1.3rem; /* 통일 */
   margin-bottom: 20px;
 }
 
@@ -37,7 +37,7 @@ label {
 }
 
 input {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
@@ -46,7 +46,7 @@ input {
 
 .btn {
   padding: 12px 20px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   background-color: #0078d7;
   color: #fff;
   border: none;
@@ -59,7 +59,7 @@ input {
 }
 
 .result-area {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   margin-top: 15px;
 }

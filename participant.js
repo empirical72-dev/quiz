@@ -28,15 +28,57 @@ const userName = prompt("이름을 입력하세요:") || "참가자";
 onValue(ref(db, "currentQuestion"), (snapshot) => {
   if (snapshot.exists()) {
     const q = snapshot.val();
-    questionArea.innerHTML = `
-      <div class="question-box">
-        <h2>문제 ${q.number}. ${q.text}</h2>
-        <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
-      </div>
-    `;
-    answerArea.style.display = "block";
-    resultArea.innerHTML = "";
-    winnerArea.innerHTML = "";
+
+    if (q.active) {
+      questionArea.innerHTML = `
+        <div class="question-box">
+          <h2>문제 ${q.number}. ${q.text}</h2>
+          <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
+        </div>
+      `;
+      answerArea.style.display = "block";
+      resultArea.innerHTML = "";
+      winnerArea.innerHTML = "";
+
+      const qNumber = q.number;
+
+      // 정답 표시
+      onValue(ref(db, `questions/${qNumber}/answer`), (ansSnap) => {
+        if (ansSnap.exists()) {
+          const correctAnswer = ansSnap.val();
+
+          onValue(ref(db, "answers"), (answersSnap) => {
+            if (answersSnap.exists()) {
+              const answers = answersSnap.val();
+              for (const key in answers) {
+                if (answers[key].name === userName && answers[key].question === qNumber) {
+                  if (answers[key].answer === correctAnswer) {
+                    resultArea.innerHTML = `⭕ 정답! (정답은 ${correctAnswer}번)`;
+                  } else {
+                    resultArea.innerHTML = `❌ 오답! (정답은 ${correctAnswer}번)`;
+                  }
+                }
+              }
+            }
+          });
+        }
+      });
+
+      // 당첨자 표시 (문제별 winners)
+      onValue(ref(db, `questions/${qNumber}/winners`), (winnerSnap) => {
+        if (winnerSnap.exists()) {
+          const winners = Array.isArray(winnerSnap.val()) ? winnerSnap.val() : Object.values(winnerSnap.val());
+          winnerArea.innerHTML = `<p>당첨자: ${winners.join(", ")}</p>`;
+        }
+      });
+
+    } else {
+      // 대기 상태
+      questionArea.innerHTML = "<p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>";
+      answerArea.style.display = "none";
+      resultArea.innerHTML = "";
+      winnerArea.innerHTML = "";
+    }
   } else {
     questionArea.innerHTML = "<p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>";
     answerArea.style.display = "none";
@@ -57,42 +99,5 @@ submitBtn.addEventListener("click", () => {
     answerInput.value = "";
   } else {
     alert("1~4 사이의 번호를 입력하세요.");
-  }
-});
-
-// 관리자가 정답 입력 → 참가자에게 O/X + 정답 표시
-onValue(ref(db, "currentQuestion"), (snapshot) => {
-  if (snapshot.exists()) {
-    const currentQ = snapshot.val();
-    const qNumber = currentQ.number;
-
-    onValue(ref(db, `questions/${qNumber}/answer`), (ansSnap) => {
-      if (ansSnap.exists()) {
-        const correctAnswer = ansSnap.val();
-
-        onValue(ref(db, "answers"), (answersSnap) => {
-          if (answersSnap.exists()) {
-            const answers = answersSnap.val();
-            for (const key in answers) {
-              if (answers[key].name === userName && answers[key].question === qNumber) {
-                if (answers[key].answer === correctAnswer) {
-                  resultArea.innerHTML = `⭕ 정답! (정답은 ${correctAnswer}번)`;
-                } else {
-                  resultArea.innerHTML = `❌ 오답! (정답은 ${correctAnswer}번)`;
-                }
-              }
-            }
-          }
-        });
-      }
-    });
-  }
-});
-
-// 관리자가 당첨자 추첨 → 참가자에게 당첨자 표시
-onValue(ref(db, "winners"), (snapshot) => {
-  if (snapshot.exists()) {
-    const winners = Array.isArray(snapshot.val()) ? snapshot.val() : Object.values(snapshot.val());
-    winnerArea.innerHTML = `<p>당첨자: ${winners.join(", ")}</p>`;
   }
 });
