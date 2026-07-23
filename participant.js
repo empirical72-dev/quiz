@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { getDatabase, ref, onValue, push, get } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBKduRPHfPIeqi-UpLq1zGnixaGosxxV8M",
@@ -21,7 +21,6 @@ const submitBtn = document.getElementById("submitAnswer");
 const resultArea = document.getElementById("resultArea");
 const winnerArea = document.getElementById("winnerArea");
 
-// 참가자 이름 입력
 const userName = prompt("이름을 입력하세요:") || "참가자";
 
 // 현재 문제 표시
@@ -42,10 +41,11 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
 
       const qNumber = q.number;
 
-      // 정답 표시
+      // 정답 표시 (정답 공개 이후에만)
       onValue(ref(db, `questions/${qNumber}/answer`), (ansSnap) => {
         if (ansSnap.exists()) {
           const correctAnswer = ansSnap.val();
+          resultArea.innerHTML = ""; // 초기화
 
           onValue(ref(db, "answers"), (answersSnap) => {
             if (answersSnap.exists()) {
@@ -61,10 +61,12 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
               }
             }
           });
+        } else {
+          resultArea.innerHTML = ""; // 정답 공개 전에는 표시하지 않음
         }
       });
 
-      // 당첨자 표시 (문제별 winners)
+      // 당첨자 표시
       onValue(ref(db, `questions/${qNumber}/winners`), (winnerSnap) => {
         if (winnerSnap.exists()) {
           const winners = Array.isArray(winnerSnap.val()) ? winnerSnap.val() : Object.values(winnerSnap.val());
@@ -85,11 +87,26 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
   }
 });
 
-// 답 제출
-submitBtn.addEventListener("click", () => {
+// 답 제출 (중복 제출 방지)
+submitBtn.addEventListener("click", async () => {
   const answerNum = parseInt(answerInput.value);
   const qNumber = parseInt(document.querySelector("h2").textContent.match(/\d+/)[0]);
+
   if (answerNum >= 1 && answerNum <= 4) {
+    // 이미 제출했는지 확인
+    const snapshot = await get(ref(db, "answers"));
+    if (snapshot.exists()) {
+      const answers = snapshot.val();
+      const alreadySubmitted = Object.values(answers).some(
+        ans => ans.name === userName && ans.question === qNumber
+      );
+      if (alreadySubmitted) {
+        alert("이미 답안을 제출했습니다. 다시 제출할 수 없습니다.");
+        return;
+      }
+    }
+
+    // 최초 제출만 허용
     push(ref(db, "answers"), {
       name: userName,
       question: qNumber,
@@ -97,6 +114,7 @@ submitBtn.addEventListener("click", () => {
     });
     alert("답안이 제출되었습니다!");
     answerInput.value = "";
+    submitBtn.disabled = true; // 버튼 비활성화
   } else {
     alert("1~4 사이의 번호를 입력하세요.");
   }
