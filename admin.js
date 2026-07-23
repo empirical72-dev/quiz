@@ -22,7 +22,9 @@ const questions = {
 
 function startQuestion(num) {
   const q = questions[num];
-  const sessionId = Date.now();
+  const sessionId = Date.now().toString();
+
+  // Firebase에 현재 문제 등록
   set(ref(db, "currentQuestion"), {
     number: num,
     text: q.text,
@@ -30,15 +32,31 @@ function startQuestion(num) {
     active: true,
     sessionId: sessionId
   });
+
+  // 정답 등록
   set(ref(db, `sessions/${sessionId}/questions/${num}/answer`), q.answer);
+
+  // 관리자 화면에 문제 표시
+  const questionsArea = document.getElementById("questionsArea");
+  questionsArea.innerHTML = `
+    <div>
+      <h3>문제 ${num}: ${q.text}</h3>
+      <ul>
+        ${q.options.map((opt, i) => `<li>${i + 1}. ${opt}</li>`).join("")}
+      </ul>
+    </div>
+  `;
 }
 
+// 버튼 이벤트 연결
 document.getElementById("startQ1").addEventListener("click", () => startQuestion(1));
 document.getElementById("startQ2").addEventListener("click", () => startQuestion(2));
 document.getElementById("startQ3").addEventListener("click", () => startQuestion(3));
 
+// 종료 버튼 이벤트
 document.getElementById("endBtn").addEventListener("click", () => {
   remove(ref(db, "currentQuestion"));
   remove(ref(db, "sessions"));
+  document.getElementById("questionsArea").innerHTML = "";
   alert("게임이 종료되었습니다.");
 });
