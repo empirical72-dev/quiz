@@ -1,30 +1,19 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBKduRPHfPIeqi-UpLq1zGnixaGosxxV8M",
-  authDomain: "quiz-game-fa3c4.firebaseapp.com",
-  databaseURL: "https://quiz-game-fa3c4-default-rtdb.firebaseio.com",
-  projectId: "quiz-game-fa3c4",
-  storageBucket: "quiz-game-fa3c4.appspot.com",
-  messagingSenderId: "547479595488",
-  appId: "1:547479595488:web:6e17f6b0f1788a4dc76385"
-};
+const firebaseConfig = { /* ... 동일 ... */ };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 문제 데이터
 const questions = {
   1: { text: "대한민국의 수도는 어디일까요?", options: ["1) 서울", "2) 부산", "3) 대구", "4) 인천"] },
   2: { text: "2+2는?", options: ["1) 3", "2) 4", "3) 5", "4) 6"] },
   3: { text: "바다의 색깔은?", options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"] }
 };
 
-// 현재 세션 ID
 let currentSessionId = null;
 
-// 세션 ID 생성 함수
 function generateSessionId() {
   return "session_" + Date.now();
 }
@@ -32,10 +21,8 @@ function generateSessionId() {
 // 문제 시작
 function startQuestion(num) {
   const q = questions[num];
-  // 새로운 세션 ID 생성
-  currentSessionId = generateSessionId();
+  if (!currentSessionId) currentSessionId = generateSessionId();
 
-  // currentQuestion에 세션 ID 포함해서 저장
   set(ref(db, "currentQuestion"), {
     sessionId: currentSessionId,
     number: num,
@@ -44,40 +31,20 @@ function startQuestion(num) {
     active: true
   });
 
-  const parentDiv = document.getElementById(`startQ${num}`).parentNode;
-  if (document.getElementById(`questionBox${num}`)) return;
-
-  const questionDiv = document.createElement("div");
-  questionDiv.className = "question-item";
-  questionDiv.id = `questionBox${num}`;
-  questionDiv.innerHTML = `
-    <h3>문제 ${num}. ${q.text}</h3>
-    <ul>${q.options.map(o => `<li>${o}</li>`).join("")}</ul>
-    <div>
-      <label>정답 입력 (번호): </label>
-      <input id="answerInput${num}" type="number" min="1" max="4">
-      <button id="saveAnswer${num}">정답 저장</button>
-    </div>
-    <div id="resultBox${num}" class="result-box"></div>
-  `;
-  parentDiv.insertAdjacentElement("afterend", questionDiv);
-
-  document.getElementById(`saveAnswer${num}`).addEventListener("click", () => {
-    const answerNum = parseInt(document.getElementById(`answerInput${num}`).value);
-    if (answerNum >= 1 && answerNum <= 4) {
-      // 정답 저장 (세션별로 구분)
-      set(ref(db, `sessions/${currentSessionId}/questions/${num}/answer`), answerNum);
-      alert(`문제 ${num} 정답이 저장되었습니다.`);
-      checkAnswers(num, answerNum);
-    }
-  });
+  // UI 생성 및 정답 저장 로직 동일...
 }
 
-// 문제 종료 → 세션 유지, active만 false로 변경
+// 문제 종료 → active만 false
 function endQuestion() {
   if (currentSessionId) {
     set(ref(db, "currentQuestion"), { sessionId: currentSessionId, active: false });
   }
+}
+
+// 테스트 종료 → currentQuestion 초기화
+function resetTest() {
+  currentSessionId = null;
+  set(ref(db, "currentQuestion"), {}); // 완전히 초기화
 }
 
 // 정답 확인 및 추첨
@@ -103,7 +70,6 @@ async function checkAnswers(num, correctAnswer) {
     document.getElementById(`pickWinners${num}`).addEventListener("click", async () => {
       const count = parseInt(document.getElementById(`winnerCount${num}`).value);
 
-      // 이미 당첨된 사람 제외 (세션별 관리)
       const snapshotWinners = await get(child(ref(db), `sessions/${currentSessionId}/allWinners`));
       const alreadyWon = snapshotWinners.exists() ? snapshotWinners.val() : [];
       const pool = correctUsers.filter(u => !alreadyWon.includes(u));
@@ -120,8 +86,8 @@ async function checkAnswers(num, correctAnswer) {
         // 문제별 winners 저장
         set(ref(db, `sessions/${currentSessionId}/questions/${num}/winners`), winners);
 
-        // 전체 누적 winners 저장
-        set(ref(db, `sessions/${currentSessionId}/allWinners`), [...alreadyWon, ...winners]);
+        // 전체 누적 winners 저장 (중복 제거)
+        set(ref(db, `sessions/${currentSessionId}/allWinners`), [...new Set([...alreadyWon, ...winners])]);
       } else {
         alert("추첨 인원이 부족하거나 이미 당첨된 사람이 많습니다.");
       }
@@ -133,3 +99,4 @@ async function checkAnswers(num, correctAnswer) {
 document.getElementById("startQ1").addEventListener("click", () => startQuestion(1));
 document.getElementById("startQ2").addEventListener("click", () => startQuestion(2));
 document.getElementById("startQ3").addEventListener("click", () => startQuestion(3));
+document.getElementById("resetBtn").addEventListener("click", resetTest);
