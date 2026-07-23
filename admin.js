@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { getDatabase, ref, set, get, child, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBKduRPHfPIeqi-UpLq1zGnixaGosxxV8M",
@@ -58,6 +58,15 @@ function endQuestion() {
   set(ref(db, "currentQuestion"), { active: false });
 }
 
+// 테스트 초기화 → Firebase 데이터 전체 삭제
+function resetTest() {
+  remove(ref(db, "answers"));
+  remove(ref(db, "questions"));
+  remove(ref(db, "allWinners"));
+  set(ref(db, "currentQuestion"), { active: false });
+  alert("테스트 데이터가 초기화되었습니다.");
+}
+
 // 정답 확인 및 추첨
 async function checkAnswers(num, correctAnswer) {
   const snapshot = await get(child(ref(db), "answers"));
@@ -111,3 +120,4 @@ async function checkAnswers(num, correctAnswer) {
 document.getElementById("startQ1").addEventListener("click", () => startQuestion(1));
 document.getElementById("startQ2").addEventListener("click", () => startQuestion(2));
 document.getElementById("startQ3").addEventListener("click", () => startQuestion(3));
+document.getElementById("resetBtn").addEventListener("click", resetTest); // 초기화 버튼 연결

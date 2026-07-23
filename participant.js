@@ -80,17 +80,27 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
       answerArea.style.display = "none";
       resultArea.innerHTML = "";
       winnerArea.innerHTML = "";
+      submitBtn.disabled = false; // 초기화 후 다시 제출 가능
     }
   } else {
+    // 데이터가 아예 삭제된 경우 → 대기 상태
     questionArea.innerHTML = "<p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>";
     answerArea.style.display = "none";
+    resultArea.innerHTML = "";
+    winnerArea.innerHTML = "";
+    submitBtn.disabled = false;
   }
 });
 
 // 답 제출 (중복 제출 방지)
 submitBtn.addEventListener("click", async () => {
   const answerNum = parseInt(answerInput.value);
-  const qNumber = parseInt(document.querySelector("h2").textContent.match(/\d+/)[0]);
+  const qNumberEl = document.querySelector("h2");
+  if (!qNumberEl) {
+    alert("현재 진행 중인 문제가 없습니다.");
+    return;
+  }
+  const qNumber = parseInt(qNumberEl.textContent.match(/\d+/)[0]);
 
   if (answerNum >= 1 && answerNum <= 4) {
     // 이미 제출했는지 확인
