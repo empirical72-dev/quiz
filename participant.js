@@ -23,12 +23,13 @@ const winnerArea = document.getElementById("winnerArea");
 
 const userName = prompt("이름을 입력하세요:") || "참가자";
 
-// 현재 문제 표시
+// 현재 문제 표시 (세션 기반)
 onValue(ref(db, "currentQuestion"), (snapshot) => {
   if (snapshot.exists()) {
     const q = snapshot.val();
 
     if (q.active) {
+      const sessionId = q.sessionId; // 현재 세션 ID
       questionArea.innerHTML = `
         <div class="question-box">
           <h2>문제 ${q.number}. ${q.text}</h2>
@@ -38,16 +39,17 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
       answerArea.style.display = "block";
       resultArea.innerHTML = "";
       winnerArea.innerHTML = "";
+      submitBtn.disabled = false;
 
       const qNumber = q.number;
 
-      // 정답 표시 (정답 공개 이후에만)
-      onValue(ref(db, `questions/${qNumber}/answer`), (ansSnap) => {
+      // 정답 표시 (세션별로만)
+      onValue(ref(db, `sessions/${sessionId}/questions/${qNumber}/answer`), (ansSnap) => {
         if (ansSnap.exists()) {
           const correctAnswer = ansSnap.val();
-          resultArea.innerHTML = ""; // 초기화
+          resultArea.innerHTML = "";
 
-          onValue(ref(db, "answers"), (answersSnap) => {
+          onValue(ref(db, `sessions/${sessionId}/answers`), (answersSnap) => {
             if (answersSnap.exists()) {
               const answers = answersSnap.val();
               for (const key in answers) {
@@ -66,13 +68,43 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
         }
       });
 
-      // 당첨자 표시
-      onValue(ref(db, `questions/${qNumber}/winners`), (winnerSnap) => {
+      // 당첨자 표시 (세션별로만)
+      onValue(ref(db, `sessions/${sessionId}/questions/${qNumber}/winners`), (winnerSnap) => {
         if (winnerSnap.exists()) {
           const winners = Array.isArray(winnerSnap.val()) ? winnerSnap.val() : Object.values(winnerSnap.val());
           winnerArea.innerHTML = `<p>당첨자: ${winners.join(", ")}</p>`;
         }
       });
+
+      // 답 제출 (세션별 중복 제출 방지)
+      submitBtn.onclick = async () => {
+        const answerNum = parseInt(answerInput.value);
+        if (answerNum >= 1 && answerNum <= 4) {
+          const snapshot = await get(ref(db, `sessions/${sessionId}/answers`));
+          if (snapshot.exists()) {
+            const answers = snapshot.val();
+            const alreadySubmitted = Object.values(answers).some(
+              ans => ans.name === userName && ans.question === qNumber
+            );
+            if (alreadySubmitted) {
+              alert("이미 이 문제에 답안을 제출했습니다. 다시 제출할 수 없습니다.");
+              return;
+            }
+          }
+
+          // 최초 제출만 허용
+          push(ref(db, `sessions/${sessionId}/answers`), {
+            name: userName,
+            question: qNumber,
+            answer: answerNum
+          });
+          alert("답안이 제출되었습니다!");
+          answerInput.value = "";
+          submitBtn.disabled = true;
+        } else {
+          alert("1~4 사이의 번호를 입력하세요.");
+        }
+      };
 
     } else {
       // 대기 상태
@@ -80,52 +112,14 @@ onValue(ref(db, "currentQuestion"), (snapshot) => {
       answerArea.style.display = "none";
       resultArea.innerHTML = "";
       winnerArea.innerHTML = "";
-      submitBtn.disabled = false; // 초기화 후 다시 제출 가능
+      submitBtn.disabled = false;
     }
   } else {
-    // 데이터가 아예 삭제된 경우 → 대기 상태
+    // 데이터가 아예 없는 경우 → 대기 상태
     questionArea.innerHTML = "<p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>";
     answerArea.style.display = "none";
     resultArea.innerHTML = "";
     winnerArea.innerHTML = "";
     submitBtn.disabled = false;
-  }
-});
-
-// 답 제출 (중복 제출 방지)
-submitBtn.addEventListener("click", async () => {
-  const answerNum = parseInt(answerInput.value);
-  const qNumberEl = document.querySelector("h2");
-  if (!qNumberEl) {
-    alert("현재 진행 중인 문제가 없습니다.");
-    return;
-  }
-  const qNumber = parseInt(qNumberEl.textContent.match(/\d+/)[0]);
-
-  if (answerNum >= 1 && answerNum <= 4) {
-    // 이미 제출했는지 확인
-    const snapshot = await get(ref(db, "answers"));
-    if (snapshot.exists()) {
-      const answers = snapshot.val();
-      const alreadySubmitted = Object.values(answers).some(
-        ans => ans.name === userName && ans.question === qNumber
-      );
-      if (alreadySubmitted) {
-        alert("이미 답안을 제출했습니다. 다시 제출할 수 없습니다.");
-        return;
-      }
-    }
-
-    // 최초 제출만 허용
-    push(ref(db, "answers"), {
-      name: userName,
-      question: qNumber,
-      answer: answerNum
-    });
-    alert("답안이 제출되었습니다!");
-    answerInput.value = "";
-    submitBtn.disabled = true; // 버튼 비활성화
-  } else {
-    alert("1~4 사이의 번호를 입력하세요.");
   }
 });

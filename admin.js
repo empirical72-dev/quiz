@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getDatabase, ref, set, get, child, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBKduRPHfPIeqi-UpLq1zGnixaGosxxV8M",
@@ -14,16 +14,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// 문제 데이터
 const questions = {
   1: { text: "대한민국의 수도는 어디일까요?", options: ["1) 서울", "2) 부산", "3) 대구", "4) 인천"] },
   2: { text: "2+2는?", options: ["1) 3", "2) 4", "3) 5", "4) 6"] },
   3: { text: "바다의 색깔은?", options: ["1) 빨강", "2) 파랑", "3) 노랑", "4) 초록"] }
 };
 
+// 현재 세션 ID
+let currentSessionId = null;
+
+// 세션 ID 생성 함수
+function generateSessionId() {
+  return "session_" + Date.now();
+}
+
 // 문제 시작
 function startQuestion(num) {
   const q = questions[num];
-  set(ref(db, "currentQuestion"), { number: num, text: q.text, options: q.options, active: true });
+  // 새로운 세션 ID 생성
+  currentSessionId = generateSessionId();
+
+  // currentQuestion에 세션 ID 포함해서 저장
+  set(ref(db, "currentQuestion"), {
+    sessionId: currentSessionId,
+    number: num,
+    text: q.text,
+    options: q.options,
+    active: true
+  });
 
   const parentDiv = document.getElementById(`startQ${num}`).parentNode;
   if (document.getElementById(`questionBox${num}`)) return;
@@ -46,30 +65,24 @@ function startQuestion(num) {
   document.getElementById(`saveAnswer${num}`).addEventListener("click", () => {
     const answerNum = parseInt(document.getElementById(`answerInput${num}`).value);
     if (answerNum >= 1 && answerNum <= 4) {
-      set(ref(db, `questions/${num}/answer`), answerNum);
+      // 정답 저장 (세션별로 구분)
+      set(ref(db, `sessions/${currentSessionId}/questions/${num}/answer`), answerNum);
       alert(`문제 ${num} 정답이 저장되었습니다.`);
       checkAnswers(num, answerNum);
     }
   });
 }
 
-// 문제 종료 → 대기 상태로 초기화
+// 문제 종료 → 세션 유지, active만 false로 변경
 function endQuestion() {
-  set(ref(db, "currentQuestion"), { active: false });
-}
-
-// 테스트 초기화 → Firebase 데이터 전체 삭제
-function resetTest() {
-  remove(ref(db, "answers"));
-  remove(ref(db, "questions"));
-  remove(ref(db, "allWinners"));
-  set(ref(db, "currentQuestion"), { active: false });
-  alert("테스트 데이터가 초기화되었습니다.");
+  if (currentSessionId) {
+    set(ref(db, "currentQuestion"), { sessionId: currentSessionId, active: false });
+  }
 }
 
 // 정답 확인 및 추첨
 async function checkAnswers(num, correctAnswer) {
-  const snapshot = await get(child(ref(db), "answers"));
+  const snapshot = await get(child(ref(db), `sessions/${currentSessionId}/answers`));
   const resultBox = document.getElementById(`resultBox${num}`);
   if (snapshot.exists()) {
     const answers = snapshot.val();
@@ -90,8 +103,8 @@ async function checkAnswers(num, correctAnswer) {
     document.getElementById(`pickWinners${num}`).addEventListener("click", async () => {
       const count = parseInt(document.getElementById(`winnerCount${num}`).value);
 
-      // 이미 당첨된 사람 제외
-      const snapshotWinners = await get(child(ref(db), "allWinners"));
+      // 이미 당첨된 사람 제외 (세션별 관리)
+      const snapshotWinners = await get(child(ref(db), `sessions/${currentSessionId}/allWinners`));
       const alreadyWon = snapshotWinners.exists() ? snapshotWinners.val() : [];
       const pool = correctUsers.filter(u => !alreadyWon.includes(u));
 
@@ -105,10 +118,10 @@ async function checkAnswers(num, correctAnswer) {
         resultBox.innerHTML += `<p>당첨자: ${winners.join(", ")}</p>`;
 
         // 문제별 winners 저장
-        set(ref(db, `questions/${num}/winners`), winners);
+        set(ref(db, `sessions/${currentSessionId}/questions/${num}/winners`), winners);
 
         // 전체 누적 winners 저장
-        set(ref(db, "allWinners"), [...alreadyWon, ...winners]);
+        set(ref(db, `sessions/${currentSessionId}/allWinners`), [...alreadyWon, ...winners]);
       } else {
         alert("추첨 인원이 부족하거나 이미 당첨된 사람이 많습니다.");
       }
@@ -120,4 +133,3 @@ async function checkAnswers(num, correctAnswer) {
 document.getElementById("startQ1").addEventListener("click", () => startQuestion(1));
 document.getElementById("startQ2").addEventListener("click", () => startQuestion(2));
 document.getElementById("startQ3").addEventListener("click", () => startQuestion(3));
-document.getElementById("resetBtn").addEventListener("click", resetTest); // 초기화 버튼 연결
