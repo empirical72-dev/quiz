@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { getDatabase, ref, set, get, child, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-const firebaseConfig = { /* ... 동일 ... */ };
+const firebaseConfig = { /* 동일 */ };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -21,7 +21,9 @@ function generateSessionId() {
 // 문제 시작
 function startQuestion(num) {
   const q = questions[num];
-  if (!currentSessionId) currentSessionId = generateSessionId();
+  if (!currentSessionId) {
+    currentSessionId = generateSessionId();
+  }
 
   set(ref(db, "currentQuestion"), {
     sessionId: currentSessionId,
@@ -31,7 +33,7 @@ function startQuestion(num) {
     active: true
   });
 
-  // UI 생성 및 정답 저장 로직 동일...
+  // ... UI 생성 및 정답 저장 로직 동일 ...
 }
 
 // 문제 종료 → active만 false
@@ -41,13 +43,17 @@ function endQuestion() {
   }
 }
 
-// 테스트 종료 → currentQuestion 초기화
-function resetTest() {
+// 게임 종료 → 세션 및 데이터 전체 초기화
+function endGame() {
   currentSessionId = null;
-  set(ref(db, "currentQuestion"), {}); // 완전히 초기화
+  // 현재 문제 상태 초기화
+  set(ref(db, "currentQuestion"), {});
+  // 세션 데이터 전체 삭제
+  remove(ref(db, "sessions"));
+  alert("게임이 종료되었습니다. 새로운 게임을 시작하려면 문제 시작 버튼을 눌러주세요.");
 }
 
-// 정답 확인 및 추첨
+// 정답 확인 및 추첨 (중복 제거 포함)
 async function checkAnswers(num, correctAnswer) {
   const snapshot = await get(child(ref(db), `sessions/${currentSessionId}/answers`));
   const resultBox = document.getElementById(`resultBox${num}`);
@@ -83,10 +89,7 @@ async function checkAnswers(num, correctAnswer) {
 
         resultBox.innerHTML += `<p>당첨자: ${winners.join(", ")}</p>`;
 
-        // 문제별 winners 저장
         set(ref(db, `sessions/${currentSessionId}/questions/${num}/winners`), winners);
-
-        // 전체 누적 winners 저장 (중복 제거)
         set(ref(db, `sessions/${currentSessionId}/allWinners`), [...new Set([...alreadyWon, ...winners])]);
       } else {
         alert("추첨 인원이 부족하거나 이미 당첨된 사람이 많습니다.");
@@ -99,4 +102,4 @@ async function checkAnswers(num, correctAnswer) {
 document.getElementById("startQ1").addEventListener("click", () => startQuestion(1));
 document.getElementById("startQ2").addEventListener("click", () => startQuestion(2));
 document.getElementById("startQ3").addEventListener("click", () => startQuestion(3));
-document.getElementById("resetBtn").addEventListener("click", resetTest);
+document.getElementById("endBtn").addEventListener("click", endGame); // 종료 버튼 연결

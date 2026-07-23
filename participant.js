@@ -1,7 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { getDatabase, ref, onValue, push, get } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-const firebaseConfig = { /* 동일 */ };
+const firebaseConfig = {
+  apiKey: "AIzaSyBKduRPHfPIeqi-UpLq1zGnixaGosxxV8M",
+  authDomain: "quiz-game-fa3c4.firebaseapp.com",
+  databaseURL: "https://quiz-game-fa3c4-default-rtdb.firebaseio.com",
+  projectId: "quiz-game-fa3c4",
+  storageBucket: "quiz-game-fa3c4.appspot.com",
+  messagingSenderId: "547479595488",
+  appId: "1:547479595488:web:6e17f6b0f1788a4dc76385"
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);

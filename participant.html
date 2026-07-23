@@ -2,32 +2,40 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>참가자 모드</title>
-  <link rel="stylesheet" href="participant.css">
+  <title>퀴즈 게임 - 참가자 모드</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #333; }
+    .question-box { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+    .answer-area { margin-top: 15px; }
+    .btn { padding: 8px 12px; margin: 5px; cursor: pointer; }
+    .btn-submit { background-color: #5bc0de; color: white; border: none; }
+    .result-box { margin-top: 10px; font-weight: bold; }
+    .winner-box { margin-top: 10px; color: green; font-weight: bold; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>참가자 모드</h1>
+  <h1>퀴즈 게임 - 참가자 모드</h1>
 
-    <!-- 문제 표시 영역 -->
-    <div id="questionArea" class="question-area">
-      <p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>
-    </div>
-
-    <!-- 답 제출 영역 -->
-    <div id="answerArea" class="answer-area" style="display:none;">
-      <label for="answerInput">정답 입력 (번호):</label>
-      <input id="answerInput" type="number" min="1" max="4">
-      <button id="submitAnswer" class="btn">제출</button>
-    </div>
-
-    <!-- 정답 결과 표시 -->
-    <div id="resultArea" class="result-area"></div>
-
-    <!-- 당첨자 표시 -->
-    <div id="winnerArea" class="winner-area"></div>
+  <!-- 문제 표시 영역 -->
+  <div id="questionArea">
+    <p>관리자가 문제를 시작하면 여기에 표시됩니다.</p>
   </div>
 
+  <!-- 답안 입력 영역 -->
+  <div id="answerArea" class="answer-area" style="display:none;">
+    <label for="answerInput">정답 입력 (번호): </label>
+    <input id="answerInput" type="number" min="1" max="4">
+    <button id="submitAnswer" class="btn btn-submit">제출</button>
+  </div>
+
+  <!-- 결과 표시 영역 -->
+  <div id="resultArea" class="result-box"></div>
+
+  <!-- 당첨자 표시 영역 -->
+  <div id="winnerArea" class="winner-box"></div>
+
+  <!-- Firebase 및 참가자 JS -->
   <script type="module" src="participant.js"></script>
 </body>
 </html>
