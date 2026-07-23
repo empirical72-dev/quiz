@@ -9,7 +9,6 @@
     .btn { padding: 8px 12px; margin: 5px; cursor: pointer; }
     .btn-danger { background-color: #d9534f; color: white; border: none; }
     .btn-start { background-color: #5cb85c; color: white; border: none; }
-    .btn-end { background-color: #f0ad4e; color: white; border: none; }
     .question-item { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
     .result-box { margin-top: 10px; font-weight: bold; }
   </style>
@@ -24,15 +23,15 @@
     <button id="startQ3" class="btn btn-start">문제 3 시작</button>
   </div>
 
-  <!-- 게임 제어 버튼 -->
+  <!-- 게임 종료 버튼 -->
   <div class="game-control">
     <button id="endBtn" class="btn btn-danger">게임 종료</button>
   </div>
 
-  <!-- 문제 표시 영역 (JS에서 동적으로 생성) -->
+  <!-- 문제 표시 영역 -->
   <div id="questionsArea"></div>
 
-  <!-- Firebase 및 관리자 JS -->
+  <!-- 관리자 JS 불러오기 -->
   <script type="module" src="admin.js"></script>
 </body>
 </html>
