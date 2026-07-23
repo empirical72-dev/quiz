@@ -3,53 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>관리자 모드</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { text-align: center; }
-    .question-box {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px auto;
-      width: 300px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .question-label {
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <h1>관리자 모드</h1>
+  <div class="container">
+    <h1>관리자 모드</h1>
 
-  <!-- 문제 1 -->
-  <div class="question-box">
-    <span class="question-label">문제 1</span>
-    <button id="startQ1">시작</button>
+    <div class="question-control">
+      <span>문제 1</span>
+      <button id="startQ1" class="btn">시작</button>
+    </div>
+
+    <div class="question-control">
+      <span>문제 2</span>
+      <button id="startQ2" class="btn">시작</button>
+    </div>
+
+    <div class="question-control">
+      <span>문제 3</span>
+      <button id="startQ3" class="btn">시작</button>
+    </div>
+
+    <!-- 게임 종료 버튼 (추가된 부분) -->
+    <div class="question-control">
+      <span>게임 종료</span>
+      <button id="endBtn" class="btn">종료</button>
+    </div>
   </div>
 
-  <!-- 문제 2 -->
-  <div class="question-box">
-    <span class="question-label">문제 2</span>
-    <button id="startQ2">시작</button>
-  </div>
-
-  <!-- 문제 3 -->
-  <div class="question-box">
-    <span class="question-label">문제 3</span>
-    <button id="startQ3">시작</button>
-  </div>
-
-  <!-- 게임 종료 버튼 -->
-  <div style="text-align:center; margin-top:20px;">
-    <button id="endBtn">게임 종료</button>
-  </div>
-
-  <!-- 문제 표시 영역 -->
-  <div id="questionsArea"></div>
-
-  <!-- 관리자 JS 불러오기 -->
   <script type="module" src="admin.js"></script>
 </body>
 </html>
