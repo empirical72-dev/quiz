@@ -3,29 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>퀴즈 게임 - 관리자 모드</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { color: #333; }
-    .btn { padding: 8px 12px; margin: 5px; cursor: pointer; }
-    .btn-danger { background-color: #d9534f; color: white; border: none; }
-    .btn-start { background-color: #5cb85c; color: white; border: none; }
-    .question-item { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
-    .result-box { margin-top: 10px; font-weight: bold; }
-  </style>
 </head>
 <body>
   <h1>퀴즈 게임 - 관리자 모드</h1>
 
   <!-- 문제 시작 버튼 -->
-  <div class="question-control">
-    <button id="startQ1" class="btn btn-start">문제 1 시작</button>
-    <button id="startQ2" class="btn btn-start">문제 2 시작</button>
-    <button id="startQ3" class="btn btn-start">문제 3 시작</button>
+  <div>
+    <button id="startQ1">문제 1 시작</button>
+    <button id="startQ2">문제 2 시작</button>
+    <button id="startQ3">문제 3 시작</button>
   </div>
 
   <!-- 게임 종료 버튼 -->
-  <div class="game-control">
-    <button id="endBtn" class="btn btn-danger">게임 종료</button>
+  <div>
+    <button id="endBtn">게임 종료</button>
   </div>
 
   <!-- 문제 표시 영역 -->
