@@ -14,11 +14,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 문제 데이터
+// 문제 데이터 (문제와 보기 포함)
 const questions = {
-  1: { text: "문제 1 내용", options: ["1번", "2번", "3번", "4번"], answer: 2 },
-  2: { text: "문제 2 내용", options: ["1번", "2번", "3번", "4번"], answer: 3 },
-  3: { text: "문제 3 내용", options: ["1번", "2번", "3번", "4번"], answer: 1 }
+  1: { text: "문제 1: 대한민국의 수도는?", options: ["서울", "부산", "대구", "인천"], answer: 1 },
+  2: { text: "문제 2: 2+2는?", options: ["3", "4", "5", "6"], answer: 2 },
+  3: { text: "문제 3: 바다의 색깔은?", options: ["빨강", "파랑", "노랑", "초록"], answer: 2 }
 };
 
 // 문제 시작 함수
@@ -40,11 +40,11 @@ function startQuestion(num) {
   // 정답 등록
   set(ref(db, `sessions/${sessionId}/questions/${num}/answer`), q.answer);
 
-  // 관리자 화면에 문제 표시
+  // 관리자 화면에 문제와 보기 표시
   const questionsArea = document.getElementById("questionsArea");
   questionsArea.innerHTML = `
     <div>
-      <h3>문제 ${num}: ${q.text}</h3>
+      <h3>${q.text}</h3>
       <ul>
         ${q.options.map((opt, i) => `<li>${i + 1}. ${opt}</li>`).join("")}
       </ul>
